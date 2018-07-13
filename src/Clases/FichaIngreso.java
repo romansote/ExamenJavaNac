@@ -39,15 +39,13 @@ public class FichaIngreso {
     
     //componentes reporte listado
     
-        
-
     public FichaIngreso() {
       
     }
     
     public void generarReporteExamen(){
         
-        String sql = "Select * from Paciente Where rut_paciente = '"+ txtBuscar.getText() +"'";
+        String sql = "SELECT * FROM Paciente Where rut_paciente = '"+ txtBuscar.getText() +"'";
         
         ResultSet res  = new Conexion().consultar(new Conexion().conectar(), sql);
         
@@ -59,7 +57,7 @@ public class FichaIngreso {
     
     public void generarReporteLista(JTable table){
         
-        String sql = " Select Paciente.rut_paciente, Persona.nombres,paciente.genero,Persona.fecha_nacimiento from Persona,Paciente WHERE Persona.Paciente_rut_paciente = Persona.Paciente_rut_paciente";
+        String sql = " SELECT Paciente.rut_paciente, Persona.nombres,paciente.genero,Persona.fecha_nacimiento from Persona,Paciente WHERE Persona.Paciente_rut_paciente = Persona.Paciente_rut_paciente";
         
         ResultSet res  = new Conexion().consultar(new Conexion().conectar(), sql);
         
@@ -73,7 +71,6 @@ public class FichaIngreso {
         this.txtBuscar = txtBuscar;
         this.tabla = tabla;
     }
-    
     
 
     public FichaIngreso(Personas.Paciente pacientes) {
@@ -94,12 +91,7 @@ public class FichaIngreso {
         this.enfermero = enfermero;
         this.comboEstado = comboEstado;
     }
-    
-    
-    
-  
-   
- 
+
     public void insertarFichaIngreso(){
         if(pacientes.getTxtNombres().getText().length()>0){
             if(pacientes.getTxtRut().getText().length()>0){
@@ -129,7 +121,7 @@ public class FichaIngreso {
                   pacientes.getTxtRut().requestFocus();
             }
         }else{
-            JOptionPane.showMessageDialog(null, "Debe ingresar su nombre para continuar");
+            JOptionPane.showMessageDialog(null, "Debe ingresar su nombre para continuar...");
             pacientes.getTxtNombres().requestFocus();
        }                                               
     }
@@ -144,93 +136,62 @@ public class FichaIngreso {
         } catch (SQLException ex) {
             Logger.getLogger(Personas.Enfermero.class.getName()).log(Level.SEVERE, null, ex);
         }
+         
     }
     
     public void cargarComboEstadoFicha(){
            
-       
-            String [] estado = new String[TipoEstado.values().length];
+        String [] estado = new String[TipoEstado.values().length];
 
-            for(TipoEstado t : TipoEstado.values()){
-                estado[t.ordinal()] = t.getEstado();
-            }
-
-             DefaultComboBoxModel dcm = new DefaultComboBoxModel(estado);
-             comboEstado.setModel(dcm);
+        for(TipoEstado t : TipoEstado.values()){
+            estado[t.ordinal()] = t.getEstado();
         }
+
+        DefaultComboBoxModel dcm = new DefaultComboBoxModel(estado);
+        comboEstado.setModel(dcm);
+    }
     
-     public void cargarPopMenu(java.awt.event.MouseEvent evt){
-         pacientes.getTableFichas().setRowSelectionAllowed(true);
-         pacientes.getTableFichas().setColumnSelectionAllowed(false);
-         
-         JPopupMenu popmenu = new JPopupMenu();
-         
-          if (evt.getButton() == MouseEvent.BUTTON3) {
-              JMenuItem seleccionar = new JMenuItem("Seleccionar paciente");
-              JMenuItem editar = new JMenuItem("Editar");
-              JMenuItem eliminar = new JMenuItem("Eliminar");
-              
-              seleccionar.addActionListener(new ActionListener() {
-                  @Override
-                  public void actionPerformed(ActionEvent e) {
-                       String rut = String.valueOf(pacientes.getTableFichas().getValueAt(pacientes.getTableFichas().getSelectedRow(),0));
-                       cargarPaciente(rut);
-                  }
-              });
-              
-              editar.addActionListener(new ActionListener() {
-                  @Override
-                  public void actionPerformed(ActionEvent e) {
-                      JOptionPane.showMessageDialog(null, "aca va el metodo editar");
-                  }
-              });
-              
-              eliminar.addActionListener(new ActionListener() {
-                  @Override
-                  public void actionPerformed(ActionEvent e) {
-                      JOptionPane.showMessageDialog(null, "aca va el metodo eliminar");
-                  }
-              });
-              
-              popmenu.add(seleccionar);
-              popmenu.addSeparator();
-              popmenu.add(editar);
-              popmenu.add(eliminar);
-              
-              pacientes.getTableFichas().setComponentPopupMenu(popmenu);
-          }
+    public void cargarPopMenu(java.awt.event.MouseEvent evt){
         
+        pacientes.getTableFichas().setRowSelectionAllowed(true);
+         
+        pacientes.getTableFichas().setColumnSelectionAllowed(false);
+         
+        JPopupMenu popmenu = new JPopupMenu();
+         
+        if (evt.getButton() == MouseEvent.BUTTON3) {
+            JMenuItem seleccionar = new JMenuItem("Seleccionar paciente");
+            JMenuItem editar = new JMenuItem("Editar");
+            JMenuItem eliminar = new JMenuItem("Eliminar");
+              
+            seleccionar.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    String rut = String.valueOf(pacientes.getTableFichas().getValueAt(pacientes.getTableFichas().getSelectedRow(),0));
+                    cargarPaciente(rut);
+                }
+            });
+              
+            editar.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    JOptionPane.showMessageDialog(null, "aca va el metodo editar");
+                }
+            });
+              
+            eliminar.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    JOptionPane.showMessageDialog(null, "aca va el metodo eliminar");
+                }
+            });
+
+            popmenu.add(seleccionar);
+            popmenu.addSeparator();
+            popmenu.add(editar);
+            popmenu.add(eliminar);
+
+            pacientes.getTableFichas().setComponentPopupMenu(popmenu);
         }
-   
-
-  /*  public void modificarEstadoFichaIngreso(){
-        if(administrador.getNombre().getText().length() > 0 ){
-            if(administrador.getComboBox().getSelectedIndex() > 0){
-                // aca va la query
-                JOptionPane.showMessageDialog(null, "Aca va el metodo cambiar estado de las fichas de ingreso");
-            }else{
-                JOptionPane.showMessageDialog(null, "Debe Seleccionar un estado para continuar");
-                administrador.getComboBox().requestFocus();
-            }
-        }else{
-            JOptionPane.showMessageDialog(null, "Debe seleccionar una ficha de ingreso para continuar");
-        }
-    }
-    
-    public Personas.Paciente getPacientes() {
-        return pacientes;
-    }
-
-    public Personas.Administrador getAdministrador() {
-        return administrador;
-    }
-
-    public Personas.Enfermero getEnfermero() {
-        return enfermero;
-    }
-
-*/
-    
-    
-    
+    }     
 }
